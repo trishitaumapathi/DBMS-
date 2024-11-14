@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Adjusted alignment to start */
+            height: 100%;
+            padding: 30px;
+        }
+
+        /* Main container */
+        .container {
+            width: 100%;
+            max-width: 1200px;  /* Increased max width */
+            background-color: #ffffff;
+            padding: 40px;  /* Increased padding */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Heading */
+        h1 {
+            text-align: center;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        h2, h3, h4 {
+            color: #00796b;
+            margin-top: 25px;
+        }
+
+        /* Instructor details and general text */
+        p {
+            margin-bottom: 15px;  /* Increased margin */
+            font-size: 1.2em;  /* Slightly larger font size */
+            color: #333;
+        }
+
+        /* Links */
+        a {
+            display: inline-block;
+            background-color: #00796b;
+            color: white;
+            padding: 12px 24px;
+            margin-top: 25px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        a:hover {
+            background-color: #004d40;
+        }
+
+        /* Contact and class lists */
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;  /* Adjusted margin for better spacing */
+            font-size: 1.2em;  /* Increased font size */
+        }
+
+        /* Card-style container for each class */
+        .class-card {
+            background-color: #ffffff;
+            padding: 25px;  /* Increased padding */
+            margin-top: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Adjustments for mobile responsiveness */
+        @media (max-width: 1024px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                width: 100%;
+                padding: 20px;
+            }
+
+            h2, h3, h4 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 1.1em;
+            }
+
+            .class-card {
+                padding: 20px;
+            }
+
+            ul {
+                padding-left: 15px;
+            }
+        }
+
+        /* Further responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            h2, h3, h4 {
+                font-size: 1.3em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .class-card {
+                padding: 15px;
+            }
+
+            ul {
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instructor</h1>
+        
+        <h2>Instructor Details</h2>
+        <p><strong>ID:</strong> {{ instructor['InstructorID'] }}</p>
+        <p><strong>Name:</strong> {{ instructor['First_Name'] }} {{ instructor['Last_Name'] }}</p>
+        <p><strong>Email:</strong> {{ instructor['Email'] }}</p>
+
+        <a href="{{ url_for('edit_instructor_details') }}" class="button">Edit Details</a>
+
+        <h2>Contact Numbers</h2>
+        <ul>
+            {% for contact in contact_numbers %}
+                <li>{{ contact['Contact_number'] }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Classes Taught</h2>
+        {% for class in classes %}
+            <div class="class-card">
+                <h3>Class ID: {{ class['ClassID'] }}</h3>
+                <p><strong>Room Number:</strong> {{ class['RoomNumber'] }}</p>
+                <p><strong>Start Time:</strong> {{ class['Start_Time'] }}</p>
+                <p><strong>End Time:</strong> {{ class['End_Time'] }}</p>
+                
+                <h4>Enrolled Students</h4>
+                <ul>
+                    {% for student in enrolled_students[class['ClassID']] %}
+                        <li>
+                            {{ student['First_Name'] }} {{ student['Last_Name'] }} -
+                            Email: {{ student['Email'] }} -
+                            Phone: {{ student['Phone'] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>

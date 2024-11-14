@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrator Dashboard</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading */
+        h2 {
+            color: #00796b;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #00796b;
+            margin-top: 30px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 8px 0;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        /* Section for Class and Entity Management */
+        .management-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Logout Button */
+        .logout-button {
+            margin-top: 30px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h3 {
+                font-size: 1.3em;
+            }
+
+            button {
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
+
+            /* Optional: Buttons stack vertically on smaller screens */
+            .management-section button {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        // Check if new_id is present and show an alert
+        window.onload = function() {
+            var newId = "{{ new_id }}"; 
+            if (newId) {
+                alert("Your new ID: " + newId);
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ admin.First_Name }} {{ admin.Last_Name }}</h2>
+        <p>Email: {{ admin.Email }}</p>
+
+        <h3></h3>
+        <button onclick="location.href='{{ url_for('class_details') }}'">View Class Details</button>
+
+        <h3></h3>
+        <div class="management-section">
+            <button onclick="location.href='{{ url_for('add_instructor') }}'">Add Instructor</button>
+            <button onclick="location.href='{{ url_for('add_student') }}'">Add Student</button>
+            <button onclick="location.href='{{ url_for('add_administrator') }}'">Add Administrator</button>
+        </div>
+
+        <h3></h3>
+        <div class="management-section">
+            <button onclick="location.href='{{ url_for('delete_instructor') }}'">Delete Instructor</button>
+            <button onclick="location.href='{{ url_for('delete_student') }}'">Delete Student</button>
+            <button onclick="location.href='{{ url_for('delete_administrator') }}'">Delete Administrator</button>
+        </div>
+
+        <div class="logout-button">
+            <button onclick="location.href='{{ url_for('logout') }}'">Logout</button>
+        </div>
+    </div>
+</body>
+</html>

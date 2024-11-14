@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Administrator</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 30px;
+            margin: 0;
+        }
+
+        /* Heading styling */
+        h2 {
+            text-align: center;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        /* Flash message styling */
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #c8e6c9;
+            color: #388e3c;
+            border-radius: 4px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        /* Form styling */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #00796b;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        /* Button styling */
+        input[type="submit"], button {
+            background-color: #004d40;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        /* Hover effect for buttons */
+        input[type="submit"]:hover, button:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+        }
+
+        /* Focus effect for input fields and buttons */
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Disabled state for buttons */
+        input[type="submit"]:disabled {
+            background-color: #b0bec5;
+            cursor: not-allowed;
+        }
+
+        /* Center align buttons at the bottom */
+        button {
+            width: auto;
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add Administrator</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message">
+                    <script>alert("{{ message }}");</script>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('create_administrator') }}" method="POST">
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" required><br><br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br><br>
+
+        <input type="submit" value="Create">
+        <button onclick="location.href='{{ url_for('administrator_dashboard') }}'">Back to Dashboard</button>
+        <button onclick="location.href='{{ url_for('logout') }}'">Logout</button>
+    </form>
+</body>
+</html>

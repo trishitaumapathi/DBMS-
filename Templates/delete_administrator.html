@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Administrator</title>
+    <style>
+        /* Basic layout styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Title styling */
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Label and input styling */
+        label {
+            display: block;
+            color: #555;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Button styling */
+        input[type="submit"],
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #df1010;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #df1010;
+        }
+
+        button {
+            background-color: #024507;
+            color: white;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            {% if deleted_message %}
+                alert("{{ deleted_message }}"); // Display the deletion success message
+                setTimeout(function() {
+                    window.location.href = "{{ url_for('administrator_dashboard') }}";
+                }, 1000);  // Redirect after 1 second
+            {% elif error %}
+                alert("{{ error }}");  // Display the error message
+            {% endif %}
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Delete Administrator</h2>
+        <form action="{{ url_for('delete_administrator') }}" method="POST">
+            <label for="admin_id">Admin ID:</label>
+            <input type="text" name="admin_id" required>
+            
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" required>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" required>
+
+            <input type="submit" value="Delete Administrator">
+            <button type="button" onclick="location.href='{{ url_for('logout') }}'">Logout</button>
+            <button onclick="location.href='{{ url_for('administrator_dashboard') }}'">Back to Dashboard</button>
+        </form>
+    </div>
+</body>
+</html>

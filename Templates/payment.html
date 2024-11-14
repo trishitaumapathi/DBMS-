@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Details</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        /* Container for payment info */
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Header Styling */
+        h3 {
+            font-size: 1.5em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        /* Payment amount styling */
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        strong {
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Link styling */
+        a {
+            display: inline-block;
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #4caf50;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Total Payment Due</h3>
+        <p>The total payment amount for you is: <strong>${{ total_amount }}</strong></p>
+        <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

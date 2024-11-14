@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Details</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading */
+        h2 {
+            text-align: center;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #00796b;
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        h4 {
+            color: #00796b;
+            margin-top: 20px;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 8px 0;
+            width: 200px;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        /* List styling */
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h3 {
+                font-size: 1.3em;
+            }
+
+            button {
+                width: 100%;
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
+
+            p, li {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Class Details</h2>
+
+        {% for class_id, details in class_details.items() %}
+            <h3>Class ID: {{ class_id }}</h3>
+            <p><strong>Room Number:</strong> {{ details.RoomNumber }}</p>
+            <p><strong>Start Time:</strong> {{ details.Start_Time }}</p>
+            <p><strong>End Time:</strong> {{ details.End_Time }}</p>
+            <p><strong>Student Capacity:</strong> {{ details.StudentCapacity }}</p>
+            <p><strong>Enrollment Status:</strong> {{ details.Enrollment_Status }}</p>
+            <p><strong>Instructor:</strong> {{ details.Instructor if details.InstructorID else "Not Assigned" }}</p>
+
+            {% if not details.InstructorID %}
+                <form action="{{ url_for('update_instructor') }}" method="post">
+                    <label for="instructor_id">Assign Instructor ID:</label>
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="text" name="instructor_id" required>
+                    <button type="submit">Assign</button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('update_instructor') }}" method="post">
+                    <label for="instructor_id">Update Instructor ID:</label>
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="text" name="instructor_id" value="{{ details.InstructorID }}" required>
+                    <button type="submit">Update</button>
+                </form>
+            {% endif %}
+
+            <h4>Prerequisites:</h4>
+            {% if details.Prerequisites %}
+                <ul>
+                    {% for prereq in details.Prerequisites %}
+                        <li>{{ prereq }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No prerequisites.</p>
+            {% endif %}
+
+            <h4>Enrolled Students:</h4>
+            {% if details.Students %}
+                <ul>
+                    {% for student in details.Students %}
+                        <li>{{ student.StudentID }} - {{ student.Name }} (Enrolled on: {{ student.Enrollment_date }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No students enrolled.</p>
+            {% endif %}
+
+            <hr>
+        {% endfor %}
+
+        <div style="text-align: center;">
+            <button onclick="location.href='{{ url_for('administrator_dashboard') }}'">Back to Dashboard</button>
+            <button onclick="location.href='{{ url_for('logout') }}'">Logout</button>
+        </div>
+    </div>
+</body>
+</html>

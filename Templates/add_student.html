@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Student</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 30px;
+            margin: 0;
+        }
+
+        /* Heading styling */
+        h2 {
+            text-align: center;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        /* Flash message styling */
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #c8e6c9;
+            color: #388e3c;
+            border-radius: 4px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        /* Form styling */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #00796b;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        /* Button styling */
+        input[type="submit"], button {
+            background-color: #004d40;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        /* Hover effect for buttons */
+        input[type="submit"]:hover, button:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+        }
+
+        /* Phone number fields styling */
+        #phone-fields input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Add more button styling */
+        button[type="button"] {
+            background-color: #004d40;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        /* Center align buttons at the bottom */
+        button {
+            width: auto;
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
+
+    <script>
+        function addEmergencyContact() {
+            const phoneContainer = document.getElementById('phone-fields');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'phone_numbers';
+            input.placeholder = 'Enter Phone Number';
+            input.pattern = '\\d{10}';
+            input.title = 'Please enter a 10-digit phone number';
+            input.oninput = function() {
+                this.setCustomValidity(this.validity.patternMismatch ? 'Please enter a 10-digit phone number' : '');
+            };
+            phoneContainer.appendChild(input);
+            phoneContainer.appendChild(document.createElement('br'));
+        }
+
+        function checkPrerequisite() {
+            const classId = document.getElementById("class_id").value;
+            const completedPrereqs = Array.from(document.getElementById("completed_prereqs").selectedOptions)
+                                          .map(option => option.value);
+
+            fetch(`/check_prerequisite?class_id=${classId}&completed_prereqs=${completedPrereqs.join(",")}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.prerequisites_met) {
+                        alert("Cannot join class as prerequisite isn’t completed.");
+                    } else {
+                        alert("All prerequisites met. You can proceed with enrollment.");
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+</head>
+<body>
+    <h2>Add Student</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message">
+                    <script>alert("{{ message }}");</script>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('create_student') }}" method="POST">
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" required><br><br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+
+        <label for="phone">Phone Number:</label>
+        <input type="text" name="phone" required pattern="\d{10}" title="Please enter a 10-digit phone number" oninput="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter a 10-digit phone number' : '');">
+        <br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br><br>
+
+        <label>Emergency Contact(s):</label>
+        <div id="phone-fields">
+            <input type="text" name="phone_numbers" placeholder="Enter Phone Number" pattern="\d{10}" title="Please enter a 10-digit phone number" oninput="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter a 10-digit phone number' : '');">
+            <br>
+        </div>
+        <button type="button" onclick="addEmergencyContact()">Add More</button>
+        <br><br>
+
+        <label for="completed_prereqs">Select Completed Prerequisites:</label>
+        <select name="completed_prereqs" id="completed_prereqs" multiple>
+            {% for class in classes %}
+                <option value="{{ class[0] }}">{{ class[0] }} - {{ class[1] }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label for="class_id">Select Class to Enroll:</label>
+        <select name="class_id" id="class_id" required onchange="checkPrerequisite()">
+            {% for class in classes %}
+                <option value="{{ class[0] }}">{{ class[0] }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <input type="submit" value="Create">
+        <button onclick="location.href='{{ url_for('administrator_dashboard') }}'">Back to Dashboard</button>
+        <button onclick="location.href='{{ url_for('logout') }}'">Logout</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student Details</title>
+    <style>
+        /* General Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Body styling */
+        body { font-family: Arial, sans-serif; background-color: #f7f7f7; display: flex; justify-content: center; padding: 20px; color: #333; }
+
+        /* Form container styling */
+        .container { max-width: 600px; width: 100%; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+
+        h1 { color: #4caf50; font-size: 1.8em; margin-bottom: 20px; text-align: center; }
+
+        label { font-size: 1em; margin-top: 10px; display: block; }
+        input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
+
+        button { padding: 10px 20px; margin-top: 10px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.3s; }
+        button:hover { background-color: #45a049; }
+
+        #completed_prerequisite, #class_id { padding: 10px 20px; margin-top: 10px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.3s; }
+
+        /* Emergency Contact section styling */
+        h3 { margin-top: 20px; margin-bottom: 10px; font-size: 1.2em; color: #333; }
+        #contact-numbers input { display: inline-block; width: 90%; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Details</h1>
+        
+        <form action="{{ url_for('edit_student_details') }}" method="post">
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" id="first_name" value="{{ student['First_Name'] }}" required>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ student['Last_Name'] }}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="{{ student['Email'] }}" required>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" name="phone" id="phone" value="{{ student['Phone'] }}" required pattern="\d{10}" title="Please enter a 10-digit phone number">
+
+            <div class="form-group">
+                <label for="completed_prerequisite">Completed Prerequisite Class:</label>
+                <select name="completed_prerequisite" id="completed_prerequisite">
+                    <option value="">Select a completed prerequisite (if any)</option>
+                    {% for completed_class in completed_classes %}
+                        <option value="{{ completed_class['ClassID'] }}">{{ completed_class['ClassID'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="class_id">Enroll in New Class:</label>
+                <select name="class_id" id="class_id">
+                    <option value="">Select a class</option>
+                    {% for class in available_classes %}
+                        <option value="{{ class['ClassID'] }}">{{ class['ClassID'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <h3>Emergency Contact:</h3>
+            <div id="contact-numbers">
+                {% for contact in contact_numbers %}
+                    <input type="tel" name="contact_number" value="{{ contact }}" required pattern="\d{10}" title="Please enter a 10-digit phone number">
+                    <br>
+                {% endfor %}
+            </div>
+
+            <button type="button" onclick="addContactField()">Add Contact Number</button><br><br>
+            
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+    <script>
+        function addContactField() {
+            const div = document.getElementById('contact-numbers');
+            const input = document.createElement('input');
+            input.type = 'tel';
+            input.name = 'contact_number';
+            input.required = true;
+            input.pattern = "\\d{10}";
+            input.title = "Please enter a 10-digit phone number";
+            div.appendChild(input);
+            div.appendChild(document.createElement('br'));
+        }
+    </script>
+</body>
+</html>

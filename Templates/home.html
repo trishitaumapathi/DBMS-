@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance Class Scheduling System - Home</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main container styling */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f5;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 1.8em;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* Login options box styling */
+        .login-options-box {
+            margin-top: 15px;
+        }
+
+        .login-options-box p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        /* Styling for login links */
+        .login-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .login-links a {
+            display: block;
+            padding: 10px;
+            color: #fff;
+            background-color: #4caf50;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for links */
+        .login-links a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to IndiMoves Dance Class</h1>
+        <div class="login-options-box">
+            <p>Please select your login option:</p>
+            <div class="login-links">
+                <a href="{{ url_for('student_login') }}">Student</a>
+                <a href="{{ url_for('instructor_login') }}">Instructor</a>
+                <a href="{{ url_for('administrator_login') }}">Administrator</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
